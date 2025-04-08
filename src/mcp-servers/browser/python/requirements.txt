@@ -1,0 +1,4 @@
+mcp
+browser-use
+langchain-openai
+anyio
