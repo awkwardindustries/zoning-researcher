@@ -403,3 +403,6 @@ FodyWeavers.xsd
 .env
 .venv/
 .*venv/
+
+# Temporary output files
+tmp/
