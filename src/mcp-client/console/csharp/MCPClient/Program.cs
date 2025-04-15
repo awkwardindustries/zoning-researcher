@@ -41,6 +41,7 @@ string key = config["AZURE_OPENAI_KEY"] ?? throw new ArgumentException("AZURE_OP
 string endpoint = config["AZURE_OPENAI_ENDPOINT"] ?? throw new ArgumentException("AZURE_OPENAI_ENDPOINT is not set.");
 
 using IChatClient chatClient = 
+    // Note: AsChatClient will be replaced by something like AsIChatClient in .NET 10
     new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key)).AsChatClient(model)
     .AsBuilder()
     .UseFunctionInvocation()
@@ -64,15 +65,14 @@ List<ChatMessage> chatHistory =
         to residences.
         When helping people out, you always ask for this information to inform the answers
         you provide:
-
-        1. The location (city and state) where they would like to build
-        2. If it will be new construction or an addition
+        - Location (city and state) where they would like to build
+        - If it will be new construction or an addition
 
         If you do not have information specific to the location they've provided, you will
         need to use your tools to find the local website with their specific zoning regulations.
-        Download those regulations. Ingest those regulations into your system, and answer based
-        on the location-specific information.
-
+        1. Try to find the regulations and download them locally so they can be ingested.
+        2. If they cannot be downloaded, try to browse the regulations for relevant information
+        or context to answer the question.
         NEVER ANSWER A QUESTION WITHOUT HAVING THE SOURCE INFORMATION FROM THE LOCATION!
 
         If you don't know the answer or cannot find the location's zoning rules or regulations,
